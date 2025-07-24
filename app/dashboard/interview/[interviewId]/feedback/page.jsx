@@ -14,8 +14,8 @@ import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 function feedback({params}) {
-    const [feedbackList, setFeedbackList] = useState(); 
-    const [avgFeedback, setAvgFeedback] = useState();
+    const [feedbackList, setFeedbackList] = useState<any[]>([]);
+const [avgFeedback, setAvgFeedback] = useState<number | null>(null);
     const router = useRouter();
     useEffect(()=>{
         GetFeedback();
