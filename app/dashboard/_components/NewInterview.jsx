@@ -39,7 +39,15 @@ export const NewInterview = () => {
 
         const Inputprompt = "Job Position: "+ jobPosition + ", Job description: "  + jobDesc + ", Years of experience: "+ jobExperience +", Depending on this information, generate 5 interview questions with answers in JSON formate. Give Question and Answered as fields in JSON. Do not add any unnecessary explanation in the response. just the json response";
 
-        const result = await chatSession.sendMessage(Inputprompt);
+        let result;
+        try {
+          result = await chatSession.sendMessage(Inputprompt);
+        } catch (err) {
+          console.error("Error from Gemini AI:", err);
+          setLoadings(false);
+          return;
+        }
+        
         let mockjsonresponse = (result.response.text()).replace('```json', '').replace('```', '');
         mockjsonresponse.slice(0,-4)
         //console.log(mockjsonresponse);
