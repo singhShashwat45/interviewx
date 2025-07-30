@@ -30,30 +30,46 @@ const StartInterview = ({params}) => {
 
     }
     return (
-    <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <QuestionSection 
-            mockInterviewQuestions = {mockInterviewQuestions}
-            activeQuestionIndex = {activeQuestionIndex}></QuestionSection>
+    <>
+        {mockInterviewQuestions ? (
+        <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <QuestionSection
+                mockInterviewQuestions={mockInterviewQuestions}
+                activeQuestionIndex={activeQuestionIndex}
+            />
 
             <RecordAnswerSection
-            mockInterviewQuestions = {mockInterviewQuestions}
-            activeQuestionIndex = {activeQuestionIndex}
-            interviewData = {interviewData}>
-            </RecordAnswerSection>
+                mockInterviewQuestions={mockInterviewQuestions}
+                activeQuestionIndex={activeQuestionIndex}
+                interviewData={interviewData}
+            />
+            </div>
+
+            <div className="flex justify-end gap-5">
+            {activeQuestionIndex > 0 && (
+                <Button onClick={() => setActiveQuestionIndex(activeQuestionIndex - 1)}>
+                Previous Question
+                </Button>
+            )}
+
+            {activeQuestionIndex < mockInterviewQuestions.length - 1 ? (
+                <Button onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}>
+                Next Question
+                </Button>
+            ) : (
+                <Link href={`/dashboard/interview/${interviewData?.mockId}/feedback`}>
+                <Button>End Interview</Button>
+                </Link>
+            )}
+            </div>
         </div>
-        <div className="flex justify-end gap-5">
-             {activeQuestionIndex > 0 && 
-             <Button onClick = {()=>setActiveQuestionIndex(activeQuestionIndex-1)}>Previous Question</Button>}
-            {activeQuestionIndex != mockInterviewQuestions?.length-1 && 
-            <Button onClick = {()=>setActiveQuestionIndex(activeQuestionIndex+1)}>Next Question</Button>}
-            {activeQuestionIndex == mockInterviewQuestions?.length-1 && 
-            <Link href = {'/dashboard/interview/'+interviewData?.mockId+'/feedback'}>
-            <Button>End Interview </Button>
-            </Link>}
-        </div>
-    </div>
-  )
+        ) : (
+        <p className="text-center text-muted-foreground">Loading interview...</p>
+        )}
+    </>
+    );
+
 }
 
 export default StartInterview;
