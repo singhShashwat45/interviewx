@@ -12,17 +12,24 @@ import Webcam from 'react-webcam';
 const Interview = ({params}) => {
     const [interviewData, setInterviewData] = useState();
     const [webcamEnabled, setWebcamEnabled] = useState(false);
-    useEffect(()=>{
-        GetInterviewDetails();
-    },[]);
-  
-    const GetInterviewDetails = async() =>{
-    const result = await db.select().from(MockInterview)
-    .where(eq(MockInterview.mockId, params.interviewId));
+    const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
 
-    console.log(result);
-    setInterviewData(result[0]);
-  }
+useEffect(() => {
+    const GetInterviewDetails = async () => {
+        try {
+            const result = await db.select().from(MockInterview)
+                .where(eq(MockInterview.mockId, params.interviewId));
+            setInterviewData(result[0]);
+        } catch (err) {
+            setError("Failed to fetch interview details");
+        } finally {
+            setLoading(false);
+        }
+    };
+    GetInterviewDetails();
+}, []);
+
   
     return (
     <div className="my-10">
