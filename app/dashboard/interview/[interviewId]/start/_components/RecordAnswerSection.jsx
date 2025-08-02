@@ -30,17 +30,24 @@ const RecordAnswerSection = ({mockInterviewQuestions, activeQuestionIndex, inter
         continuous: true,
         useLegacyResults: false
       });
-    useEffect(()=>{
-        results.map((result)=>{
-            setUserAnswer(prevAns => prevAns + result?.transcript)
-        })
-    },[results])
-
-    useEffect(()=>{
-        if(!isRecording && userAnswer.length > 10){
-            UpdateUserAnswer();
+    useEffect(() => {
+        if (results.length > 0) {
+            const finalTranscript = results.map(r => r.transcript).join(' ');
+            setUserAnswer(finalTranscript);
         }
-    },[userAnswer]);
+    }, [results]);
+
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (!isRecording && userAnswer.length > 10) {
+            UpdateUserAnswer();
+            }
+        }, 1500); // 1.5 sec buffer
+
+        return () => clearTimeout(timeout);
+    }, [userAnswer, isRecording]);
+
 
 
     const StartStopRecording = async()=>{
